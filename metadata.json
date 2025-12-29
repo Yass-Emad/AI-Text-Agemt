@@ -1,0 +1,5 @@
+{
+  "name": "Advanced AI Text Extraction Agent",
+  "description": "A high-performance text extraction tool using Gemini AI for hybrid OCR and direct text recovery from PDFs, Images, and Documents.",
+  "requestFramePermissions": []
+}
