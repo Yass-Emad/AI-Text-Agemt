@@ -3,7 +3,7 @@ import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
 const getAI = () => {
   if (!process.env.API_KEY) {
-    throw new Error("API Key is missing. Please ensure the environment is configured correctly.");
+    throw new Error("API Key is missing.");
   }
   return new GoogleGenAI({ apiKey: process.env.API_KEY });
 };
@@ -14,8 +14,6 @@ export const extractTextWithAI = async (
   onProgress?: (progress: number) => void
 ): Promise<string> => {
   const ai = getAI();
-  
-  // Extracting base64 data from the data URL
   const base64Data = fileData.split(',')[1];
   
   try {
@@ -31,13 +29,20 @@ export const extractTextWithAI = async (
               }
             },
             {
-              text: "Perform high-accuracy text extraction from this file. Maintain the original formatting, lists, and structure as closely as possible. If the document is in multiple languages (like English and Arabic), extract both correctly. Output only the extracted text."
+              text: `TASK: Perform high-precision OCR and layout extraction.
+LANGUAGES: Multi-language support, with primary focus on Arabic and English.
+INSTRUCTIONS:
+1. Extract ALL text from the images or PDF pages.
+2. Maintain the original structure (headings, lists, table data).
+3. Ensure Arabic text is correctly joined and flows correctly from right to left where applicable.
+4. If there are handwritten notes, transcribe them as accurately as possible.
+5. DO NOT add any commentary. Output ONLY the extracted text.`
             }
           ]
         }
       ],
       config: {
-        temperature: 0.1, // Low temperature for factual extraction
+        temperature: 0.1,
         topP: 0.95,
         topK: 64,
       }
